@@ -2,11 +2,13 @@ const myLibrary = [];
 const tableBody = document
   .getElementById("library")
   .getElementsByTagName("tbody")[0];
+
 const newBookDialog = document.querySelector("dialog.new");
 const newBookButton = document.querySelector("button.new");
 const newBookDialogCancelButton = document.querySelector(
   "dialog.new > button.cancel"
 );
+
 const form = document.getElementById("new-book");
 
 function Book(title, author, pages, isRead) {
@@ -22,17 +24,36 @@ function addBookToLibrary(book) {
   }
 }
 
+function removeBook(book) {
+  let index = myLibrary.indexOf(book);
+  if (index !== -1) {
+    myLibrary.splice(index, 1);
+  }
+  displayBooks();
+}
+
 function displayBooks() {
-  tableBody.innerHTML = "" // Clear table contents
+  tableBody.innerHTML = ""; // Clear table contents
 
   myLibrary.forEach((book) => {
     let bookRow = tableBody.insertRow();
 
+    // Insert data for all book properties
     for (const property in book) {
       let newCell = bookRow.insertCell();
       let newText = document.createTextNode(book[property]);
       newCell.appendChild(newText);
     }
+
+    // Add delete button for each book
+    let deleteButton = document.createElement("input");
+    deleteButton.type = "button";
+    deleteButton.className = "remove";
+    deleteButton.innerText = "X";
+    deleteButton.onclick = () => removeBook(book);
+    
+    let newCell = bookRow.insertCell();
+    newCell.appendChild(deleteButton);
   });
 }
 
@@ -44,7 +65,7 @@ newBookDialogCancelButton.addEventListener("click", () => {
   newBookDialog.close();
 });
 
-form.addEventListener("submit", event => {
+form.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const title = form.title.value;
@@ -55,4 +76,6 @@ form.addEventListener("submit", event => {
   const book = new Book(title, author, pages, isRead);
   addBookToLibrary(book);
   displayBooks();
+  newBookDialog.close();
+  form.reset();
 });
