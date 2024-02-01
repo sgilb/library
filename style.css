@@ -60,3 +60,12 @@ caption {
   gap: 10px;
   margin-bottom: 20px;
 }
+
+.remove {
+  background-color: darkred;
+  color: white;
+  padding: 0;
+  border: none;
+  border-radius: 25%;
+  width: 18px;
+}

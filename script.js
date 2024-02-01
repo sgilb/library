@@ -21,6 +21,7 @@ function Book(title, author, pages, isRead) {
 function addBookToLibrary(book) {
   if (!myLibrary.includes(book)) {
     myLibrary.push(book);
+    displayBooks();
   }
 }
 
@@ -28,7 +29,12 @@ function removeBook(book) {
   let index = myLibrary.indexOf(book);
   if (index !== -1) {
     myLibrary.splice(index, 1);
+    displayBooks();
   }
+}
+
+function toggleRead(book) {
+  book.isRead = !book.isRead;
   displayBooks();
 }
 
@@ -38,20 +44,34 @@ function displayBooks() {
   myLibrary.forEach((book) => {
     let bookRow = tableBody.insertRow();
 
-    // Insert data for all book properties
+    // Insert data for book properties
     for (const property in book) {
       let newCell = bookRow.insertCell();
-      let newText = document.createTextNode(book[property]);
-      newCell.appendChild(newText);
+      let newContent;
+
+      // Add toggle
+      if (property === "isRead") {
+        let readToggle = document.createElement("input");
+        readToggle.type = "checkbox";
+        readToggle.className = "read-toggle";
+        readToggle.checked = book[property];
+        readToggle.onclick = (event) => {
+          toggleRead(book);
+          console.log(myLibrary);
+        };
+        newContent = readToggle;
+      } else {
+        newContent = document.createTextNode(book[property]);
+      }
+      newCell.appendChild(newContent);
     }
 
     // Add delete button for each book
-    let deleteButton = document.createElement("input");
-    deleteButton.type = "button";
+    let deleteButton = document.createElement("button");
     deleteButton.className = "remove";
     deleteButton.innerText = "X";
     deleteButton.onclick = () => removeBook(book);
-    
+
     let newCell = bookRow.insertCell();
     newCell.appendChild(deleteButton);
   });
@@ -71,11 +91,10 @@ form.addEventListener("submit", (event) => {
   const title = form.title.value;
   const author = form.author.value;
   const pages = form.pages.value;
-  const isRead = form.read.checked ? "Yes" : "No";
+  const isRead = form.read.checked;
 
   const book = new Book(title, author, pages, isRead);
   addBookToLibrary(book);
-  displayBooks();
   newBookDialog.close();
   form.reset();
 });
