@@ -1,17 +1,19 @@
 const myLibrary = [];
-let tableBody = document
+const tableBody = document
   .getElementById("library")
   .getElementsByTagName("tbody")[0];
+const newBookDialog = document.querySelector("dialog.new");
+const newBookButton = document.querySelector("button.new");
+const newBookDialogCancelButton = document.querySelector(
+  "dialog.new > button.cancel"
+);
+const form = document.getElementById("new-book");
 
 function Book(title, author, pages, isRead) {
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.isRead = isRead;
-  // this.info = function () {
-  //   readString = this.isRead ? "read" : "not read yet";
-  //   return `${this.title} by ${this.author}, ${this.pages} pages, ${readString}`;
-  // };
 }
 
 function addBookToLibrary(book) {
@@ -21,6 +23,8 @@ function addBookToLibrary(book) {
 }
 
 function displayBooks() {
+  tableBody.innerHTML = "" // Clear table contents
+
   myLibrary.forEach((book) => {
     let bookRow = tableBody.insertRow();
 
@@ -32,6 +36,23 @@ function displayBooks() {
   });
 }
 
-const book = new Book("To Kill a Mockingbird", "Harper Lee", 281, true);
-addBookToLibrary(book);
-displayBooks();
+newBookButton.addEventListener("click", () => {
+  newBookDialog.showModal();
+});
+
+newBookDialogCancelButton.addEventListener("click", () => {
+  newBookDialog.close();
+});
+
+form.addEventListener("submit", event => {
+  event.preventDefault();
+
+  const title = form.title.value;
+  const author = form.author.value;
+  const pages = form.pages.value;
+  const isRead = form.read.checked ? "Yes" : "No";
+
+  const book = new Book(title, author, pages, isRead);
+  addBookToLibrary(book);
+  displayBooks();
+});

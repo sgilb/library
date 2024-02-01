@@ -4,12 +4,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Library</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 
 <body>
+  <dialog class="new">
+    <h2>Book details:</h2>
+    <form id="new-book">
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title">
+      <label for="author">Author</label>
+      <input type="text" id="author" name="author">
+      <label for="pages">Number of pages</label>
+      <input type="number" id="pages" name="pages">
+      <label for="read">Have you read it?</label>
+      <input type="checkbox" id="read" name="read">
+    </form>
+    <button type="submit" form="new-book" value="Submit">Add</button>
+    <button class="cancel">Cancel</button>
+  </dialog>
+  <button class="new">NEW BOOK</button>
   <table id="library">
     <thead>
       <tr>
